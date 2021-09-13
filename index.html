@@ -8,8 +8,13 @@
     <title>The Paint</title>
 </head>
 <body>
-    <canvas id="canvas" width="600" height="600"></canvas>
-
+    <h1>The Paint</h1>
+    <section id="tools">
+        <input type="color" id="color" onchange="lineColour(this)"><br>
+        <input type="range" onchange="lineWidth(this)" max="200" min="1" value="1"><span id="value">0</span><br>
+        <input type="button" value="Borrar" onclick="cleanUp()">
+    </section>
+    <canvas id="canvas" width="500" height="500"></canvas>
 
     <script src="js/thePaint.js"></script>
 </body>

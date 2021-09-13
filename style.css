@@ -1,5 +1,14 @@
 #canvas{
-    border: 1px solid black;
-    display: flex;
+    border: 1px solid black;  
+    display: flex;  
     align-items: center;
+}
+#tools{
+    display: flex;
+    flex-direction: column;
+}
+#color{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
 }
