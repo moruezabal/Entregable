@@ -3,6 +3,8 @@
 let canvas = document.getElementById("canvas");
 let context = canvas.getContext("2d");
 
+let btnBorrar = document.getElementById("borrar");
+let btnBorrarTodo = document.getElementById("borrarTodo");
 
 context.lineWidth = 1;//ancho de linea
 
@@ -32,6 +34,10 @@ canvas.addEventListener('mouseup', function(){ //cuando levanto el mouse se acti
     ruta = false; 
 });
 
+btnBorrarTodo.addEventListener("click", cleanUpAll);
+btnBorrar.addEventListener("click", cleanUp);
+
+
 function lineColour(color){ // funcion para el color
     context.strokeStyle = color.value;
 }
@@ -44,6 +50,8 @@ function lineWidth(ancho){ //funcion para el ancho de la linea
 function cleanUpAll(){ // funcion borrar/limpiar todo
     context.clearRect(0,0,canvas.width, canvas.height); // se le pasa las coordenadas iniciales (0 en x y 0 en y) y el ancho y alto final del canvas
 }
-function cleanUp(){ // esta funcion se usara como goma.. pinta con blanco
-
+function cleanUp(){ 
+    
+    // esta funcion se usara como goma.. pinta con blanco
+    console.log("Borrè");
 }
