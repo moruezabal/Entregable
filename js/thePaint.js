@@ -5,6 +5,7 @@ let context = canvas.getContext("2d");
 
 let btnBorrar = document.getElementById("borrar");
 let btnBorrarTodo = document.getElementById("borrarTodo");
+let btnGreyScale = document.getElementById("greyScale");
 
 let loadButton = document.getElementById('loadButton');
 
@@ -39,24 +40,32 @@ canvas.addEventListener('mouseup', function(){ //cuando levanto el mouse se acti
 btnBorrarTodo.addEventListener("click", cleanUpAll);
 btnBorrar.addEventListener("click", cleanUp);
 
+
 loadButton.addEventListener('change', function(ev) {
     if(ev.target.files) {
-       let file = ev.target.files[0];
-       var reader  = new FileReader();
-       reader.readAsDataURL(file);
-       reader.onloadend = function (e) {
-           var image = new Image();
-           image.src = e.target.result;
-           image.onload = function(ev) {
-              var canvas = document.getElementById('canvas');
-              canvas.width = image.width;
-              canvas.height = image.height;
-              var ctx = canvas.getContext('2d');
-              ctx.drawImage(image,0,0);
-          }
-       }
+        let file = ev.target.files[0];
+        var reader  = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = function (e) {
+            var image = new Image();
+            image.src = e.target.result;
+            image.onload = function(ev) { //El evento se activa cada vez q la operacion de lectura se completo satisfactoriamente
+                var canvas = document.getElementById('canvas');
+                
+                if(canvas.width<image.width)
+                    image.width = canvas.width;
+                else
+                    canvas.width = image.width;
+                /*if(canvas.height < image.height)
+                    image.height = canvas.height;
+                else
+                    canvas.height = image.height;**/
+                var context = canvas.getContext('2d');
+                context.drawImage(image,0,0,canvas.width,canvas.height);
+            }
+        }
     }
- });
+});
 
 
 function lineColour(color){ // funcion para el color
@@ -76,3 +85,25 @@ function cleanUp(){
     // esta funcion se usara como goma.. pinta con blanco
     console.log("Borrè");
 }
+
+btnGreyScale.addEventListener("click", grayscale);
+
+function grayscale() {
+    let canvas = document.getElementById("canvas");
+    let context = canvas.getContext("2d");
+  
+    var imageData = context.getImageData(0,0,canvas.width, canvas.height);
+    var pixels = imageData.data;
+    var numPixels = pixels.length;
+  
+    context.clearRect(0, 0,canvas.width, canvas.height);
+  
+    for (var i = 0; i < numPixels; i++) {
+        var prom = (pixels[i*4] + pixels[i*4+1] + pixels[i*4+2]) /3;
+        
+        pixels[i*4] = prom;
+        pixels[i*4+1] = prom;
+        pixels[i*4+2] = prom;
+    }
+    context.putImageData(imageData, 0, 0);
+  }
