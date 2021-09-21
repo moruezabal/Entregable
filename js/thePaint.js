@@ -6,6 +6,8 @@ let context = canvas.getContext("2d");
 let btnBorrar = document.getElementById("borrar");
 let btnBorrarTodo = document.getElementById("borrarTodo");
 
+let loadButton = document.getElementById('loadButton');
+
 context.lineWidth = 1;//ancho de linea
 
 let ruta = false; //si se movio el mouse
@@ -36,6 +38,25 @@ canvas.addEventListener('mouseup', function(){ //cuando levanto el mouse se acti
 
 btnBorrarTodo.addEventListener("click", cleanUpAll);
 btnBorrar.addEventListener("click", cleanUp);
+
+loadButton.addEventListener('change', function(ev) {
+    if(ev.target.files) {
+       let file = ev.target.files[0];
+       var reader  = new FileReader();
+       reader.readAsDataURL(file);
+       reader.onloadend = function (e) {
+           var image = new Image();
+           image.src = e.target.result;
+           image.onload = function(ev) {
+              var canvas = document.getElementById('canvas');
+              canvas.width = image.width;
+              canvas.height = image.height;
+              var ctx = canvas.getContext('2d');
+              ctx.drawImage(image,0,0);
+          }
+       }
+    }
+ });
 
 
 function lineColour(color){ // funcion para el color
