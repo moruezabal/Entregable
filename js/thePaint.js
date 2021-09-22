@@ -6,6 +6,7 @@ let context = canvas.getContext("2d");
 let btnBorrar = document.getElementById("borrar");
 let btnBorrarTodo = document.getElementById("borrarTodo");
 let btnGreyScale = document.getElementById("greyScale");
+let btnNegative = document.getElementById("negative")
 
 let loadButton = document.getElementById('loadButton');
 
@@ -86,7 +87,7 @@ function cleanUp(){
     console.log("Borrè");
 }
 
-btnGreyScale.addEventListener("click", grayscale);
+
 
 function grayscale() {
     let canvas = document.getElementById("canvas");
@@ -106,4 +107,30 @@ function grayscale() {
         pixels[i*4+2] = prom;
     }
     context.putImageData(imageData, 0, 0);
-  }
+}
+
+function negative(){
+    var imageData = context.getImageData(0,0,canvas.width, canvas.height);
+    var dataArr = imageData.data;
+
+    for(var i = 0; i < dataArr.length; i += 4)
+    {
+        var r = dataArr[i]; 
+        var g = dataArr[i + 1]; 
+        var b = dataArr[i + 2]; 
+        var a = dataArr[i + 3]; 
+
+        var invertedRed = 255 - r;
+        var invertedGreen = 255 - g;
+        var invertedBlue = 255 - b;
+
+        dataArr[i] = invertedRed;
+        dataArr[i + 1] = invertedGreen;
+        dataArr[i + 2] = invertedBlue;
+    }
+    context.putImageData(imageData, 0, 0);
+}
+
+
+btnGreyScale.addEventListener("click", grayscale);
+btnNegative.addEventListener("click", negative);
