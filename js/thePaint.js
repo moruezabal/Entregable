@@ -9,6 +9,7 @@ let btnGreyScale = document.getElementById("greyScale");
 let btnNegative = document.getElementById("negative");
 let btnSepia = document.getElementById("sepia");
 let btnContrast = document.getElementById("contrast");
+let btnBlur = document.getElementById("blur");
 
 let loadButton = document.getElementById('loadButton');
 
@@ -61,6 +62,7 @@ loadButton.addEventListener('change', function(ev) {
 });
 
 function scaleToFit(img){
+    let canvas = document.getElementById("canvas");
     // obtener la escala
     var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
     // obtener la posición superior izquierda de la imagen
@@ -184,6 +186,10 @@ function contrastImage(){
     context.putImageData( imageData, 0, 0 );
 }
 
+function blur() {
+    //Apply blur effect
+}
+
 
 btnBorrarTodo.addEventListener("click", cleanUpAll);
 btnBorrar.addEventListener("click", cleanUp);
@@ -192,3 +198,4 @@ btnGreyScale.addEventListener("click", grayscale);
 btnNegative.addEventListener("click", negative);
 btnSepia.addEventListener("click", sepia);
 btnContrast.addEventListener("click", contrastImage);
+btnBlur.addEventListener("click", blur)
