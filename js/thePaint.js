@@ -6,7 +6,8 @@ let context = canvas.getContext("2d");
 let btnBorrar = document.getElementById("borrar");
 let btnBorrarTodo = document.getElementById("borrarTodo");
 let btnGreyScale = document.getElementById("greyScale");
-let btnNegative = document.getElementById("negative")
+let btnNegative = document.getElementById("negative");
+let btnSepia = document.getElementById("sepia");
 
 let loadButton = document.getElementById('loadButton');
 
@@ -98,7 +99,7 @@ function grayscale() {
     var numPixels = pixels.length;
   
     context.clearRect(0, 0,canvas.width, canvas.height);
-  
+    //iteracion por pixel y sus valores
     for (var i = 0; i < numPixels; i++) {
         var prom = (pixels[i*4] + pixels[i*4+1] + pixels[i*4+2]) /3;
         
@@ -131,6 +132,33 @@ function negative(){
     context.putImageData(imageData, 0, 0);
 }
 
+function sepia() {
+    let canvas = document.getElementById("canvas");
+    let context = canvas.getContext("2d");
+  
+    var imageData = context.getImageData(0,0,canvas.width, canvas.height);
+    var pixels = imageData.data;
+    var numPixels = pixels.length;
+ 
+    for ( var i = 0; i < numPixels; i++ ) {
+        var r = pixels[ i * 4 ];
+        var g = pixels[ i * 4 + 1 ];
+        var b = pixels[ i * 4 + 2 ];
+ 
+        pixels[ i * 4 ] = 255 - r;
+        pixels[ i * 4 + 1 ] = 255 - g;
+        pixels[ i * 4 + 2 ] = 255 - b;
+ 
+        pixels[ i * 4 ] = ( r * .393 ) + ( g *.769 ) + ( b * .189 );
+        pixels[ i * 4 + 1 ] = ( r * .349 ) + ( g *.686 ) + ( b * .168 );
+        pixels[ i * 4 + 2 ] = ( r * .272 ) + ( g *.534 ) + ( b * .131 );
+    }
+ 
+    context.putImageData( imageData, 0, 0 );
+};
+
+
 
 btnGreyScale.addEventListener("click", grayscale);
 btnNegative.addEventListener("click", negative);
+btnSepia.addEventListener("click", sepia);
