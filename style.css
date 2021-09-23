@@ -1,5 +1,8 @@
 html{
-    background-image: url(../img/);
+    background-image: url(./img/fondo-madera-verde.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+
 }
 body{
     font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -13,9 +16,10 @@ section, .drawingSheet {
 }
 #canvas{
     background-color: white;
-    border: 1px solid black;  
+    border: 1px solid grey;  
     display: flex;  
     align-items: center;
+    box-shadow:5px 5px 15px rgb(102, 101, 101);
 }
 .drawingSheet{
     flex-direction: column;
