@@ -45,6 +45,7 @@ canvas.addEventListener('mouseup', function(){ //cuando levanto el mouse se acti
 
 
 loadButton.addEventListener('change', function(ev) {
+    cleanUpAll();
     if(ev.target.files) {
         let file = ev.target.files[0];
         var reader  = new FileReader();
@@ -53,22 +54,20 @@ loadButton.addEventListener('change', function(ev) {
             var image = new Image();
             image.src = e.target.result;
             image.onload = function(ev) { //El evento se activa cada vez q la operacion de lectura se completo satisfactoriamente
-                var canvas = document.getElementById('canvas');
-                
-                if(canvas.width<image.width)
-                    image.width = canvas.width;
-                else
-                    canvas.width = image.width;
-                /*if(canvas.height < image.height)
-                    image.height = canvas.height;
-                else
-                    canvas.height = image.height;**/
-                var context = canvas.getContext('2d');
-                context.drawImage(image,0,0,canvas.width,canvas.height);
+                scaleToFit(this);
             }
         }
     }
 });
+
+function scaleToFit(img){
+    // obtener la escala
+    var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+    // obtener la posición superior izquierda de la imagen
+    var x = (canvas.width / 2) - (img.width / 2) * scale;
+    var y = (canvas.height / 2) - (img.height / 2) * scale;
+    context.drawImage(img, x, y, img.width * scale, img.height * scale);
+}
 
 
 function lineColour(color){ // funcion para el color
