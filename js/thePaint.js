@@ -85,9 +85,7 @@ function cleanUpAll(){ // funcion borrar/limpiar todo
     context.clearRect(0,0,canvas.width, canvas.height); // se le pasa las coordenadas iniciales (0 en x y 0 en y) y el ancho y alto final del canvas
 }
 function cleanUp(){ 
-    
-    // esta funcion se usara como goma.. pinta con blanco
-    console.log("Borrè");
+    context.strokeStyle = 'white';
 }
 
 function contrast(grado){ //funcion para el ancho de la linea
