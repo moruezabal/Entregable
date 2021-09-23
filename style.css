@@ -1,3 +1,9 @@
+html{
+    background-image: url(../img/);
+}
+body{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
 .container{
     display: flex;
     justify-content: center;
@@ -13,6 +19,7 @@ section, .drawingSheet {
 }
 .drawingSheet{
     flex-direction: column;
+    align-content: center;
 }
 #tools{
     display: flex;
@@ -29,8 +36,16 @@ section, .drawingSheet {
 section{
     flex-direction: column;
 }
-h1{
+body h1{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     display: flex;
     justify-content: center;
     margin: 10px;
+}
+#tools input{
+    margin: 5px;
+    padding: 3px;
+}
+form p{
+    
 }
