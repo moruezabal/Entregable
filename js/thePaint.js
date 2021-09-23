@@ -8,10 +8,12 @@ let btnBorrarTodo = document.getElementById("borrarTodo");
 let btnGreyScale = document.getElementById("greyScale");
 let btnNegative = document.getElementById("negative");
 let btnSepia = document.getElementById("sepia");
+let btnContrast = document.getElementById("contrast");
 
 let loadButton = document.getElementById('loadButton');
 
 context.lineWidth = 1;//ancho de linea
+context.contrast = 0;// inicio de contr
 
 let ruta = false; //si se movio el mouse
 
@@ -39,8 +41,7 @@ canvas.addEventListener('mouseup', function(){ //cuando levanto el mouse se acti
     ruta = false; 
 });
 
-btnBorrarTodo.addEventListener("click", cleanUpAll);
-btnBorrar.addEventListener("click", cleanUp);
+
 
 
 loadButton.addEventListener('change', function(ev) {
@@ -88,8 +89,12 @@ function cleanUp(){
     console.log("Borrè");
 }
 
+function contrast(grado){ //funcion para el ancho de la linea
+    context.lineWidth = grado.value;
+    document.getElementById("degree").innerHTML = grado.value;
+}
 
-
+// -----------------------EFECTOS------------------------------------
 function grayscale() {
     let canvas = document.getElementById("canvas");
     let context = canvas.getContext("2d");
@@ -155,10 +160,36 @@ function sepia() {
     }
  
     context.putImageData( imageData, 0, 0 );
-};
+}
+
+function contrastImage(){
+
+    let canvas = document.getElementById("canvas");
+    let context = canvas.getContext("2d");
+  
+    var imageData = context.getImageData(0,0,canvas.width, canvas.height);
+    var data = imageData.data;
+    for (var i = 0; i < data.length; i += 4) {
+        var contrast = document.getElementById("degree").innerHTML;
+        var average = Math.round( ( data[i] + data[i+1] + data[i+2] ) / 3 );
+        if (average > 127){
+            data[i] += ( data[i]/average ) * contrast;
+            data[i+1] += ( data[i+1]/average ) * contrast;
+            data[i+2] += ( data[i+2]/average ) * contrast;
+        }else{
+            data[i] -= ( data[i]/average ) * contrast;
+            data[i+1] -= ( data[i+1]/average ) * contrast;
+            data[i+2] -= ( data[i+2]/average ) * contrast;
+        }
+    }
+    context.putImageData( imageData, 0, 0 );
+}
 
 
+btnBorrarTodo.addEventListener("click", cleanUpAll);
+btnBorrar.addEventListener("click", cleanUp);
 
 btnGreyScale.addEventListener("click", grayscale);
 btnNegative.addEventListener("click", negative);
 btnSepia.addEventListener("click", sepia);
+btnContrast.addEventListener("click", contrastImage);

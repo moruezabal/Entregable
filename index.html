@@ -20,6 +20,10 @@
             <input type="button" value="Escala de grises" id="greyScale">
             <input type="button" value="Negativo" id="negative">
             <input type="button" value="Sepia" id="sepia">
+            <input type="button" value="Contraste" id="contrast">
+
+            <input type="range" onchange="contrast(this)" max="255" min="0" value="1"><span id="degree">0</span><br>
+            
         </section>
         <div class="drawingSheet">
             <canvas id="canvas" width="800" height="500"></canvas>
