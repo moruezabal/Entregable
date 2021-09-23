@@ -10,6 +10,7 @@ let btnNegative = document.getElementById("negative");
 let btnSepia = document.getElementById("sepia");
 let btnContrast = document.getElementById("contrast");
 let btnBlur = document.getElementById("blur");
+let btnSave = document.getElementById("save");
 
 let loadButton = document.getElementById('loadButton');
 
@@ -188,6 +189,19 @@ function blur() {
     //Apply blur effect
 }
 
+function save() {
+    var link = window.document.createElement( 'a' ),
+        url = canvas.toDataURL(),
+        filename = 'image.jpg';
+ 
+    link.setAttribute( 'href', url );
+    link.setAttribute( 'download', filename );
+    link.style.visibility = 'hidden';
+    window.document.body.appendChild( link );
+    link.click();
+    window.document.body.removeChild( link );
+};
+
 
 btnBorrarTodo.addEventListener("click", cleanUpAll);
 btnBorrar.addEventListener("click", cleanUp);
@@ -196,4 +210,5 @@ btnGreyScale.addEventListener("click", grayscale);
 btnNegative.addEventListener("click", negative);
 btnSepia.addEventListener("click", sepia);
 btnContrast.addEventListener("click", contrastImage);
-btnBlur.addEventListener("click", blur)
+btnBlur.addEventListener("click", blur);
+btnSave.addEventListener("click", save);
