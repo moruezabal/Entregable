@@ -42,9 +42,6 @@ canvas.addEventListener('mouseup', function(){ //cuando levanto el mouse se acti
     ruta = false; 
 });
 
-
-
-
 loadButton.addEventListener('change', function(ev) {
     cleanUpAll();
     if(ev.target.files) {
@@ -88,12 +85,14 @@ function cleanUp(){
     context.strokeStyle = 'white';
 }
 
-function contrast(grado){ //funcion para el ancho de la linea
-    context.lineWidth = grado.value;
+function contrast(grado){ //funcion para determinar el grado de contraste
+    context.contrast = grado.value;
     document.getElementById("degree").innerHTML = grado.value;
 }
 
-// -----------------------EFECTOS------------------------------------
+// -----------------------FILTROS------------------------------------
+
+
 function grayscale() {
     let canvas = document.getElementById("canvas");
     let context = canvas.getContext("2d");
