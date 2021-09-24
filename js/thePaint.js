@@ -16,53 +16,55 @@ let loadButton = document.getElementById('loadButton');
 
 //--------------------------
 
-context.lineWidth = 1;//ancho de linea
-context.contrast = 0;// inicio de contraste
+context.lineWidth = 1;//Ancho de línea
+context.contrast = 0;// Inicio de contraste
 
-let ruta = false; //si se movio el mouse
+let ruta = false; //Si se movió el mouse
 
-function draw(event){// funcion dibujar
-    let x = event.clientX - canvas.offsetLeft; // posicion x del mouse
-    let y = event.clientY - canvas.offsetTop; // posicion y del mouse
+// Función dibujar
+function draw(event){
+    let x = event.clientX - canvas.offsetLeft; // Posición x del mouse
+    let y = event.clientY - canvas.offsetTop; // Posición y del mouse
 
     if(ruta == true){
-        context.lineTo(x,y); // hacer linea al x,y
-        context.stroke(); // dibuja la linea
+        context.lineTo(x,y); // Hacer línea al x,y
+        context.stroke(); // Dibuja la línea
     }
 }
 
 function scaleToFit(img){
     let canvas = document.getElementById("canvas");
-    // obtener la escala
+    // Obtener la escala
     let scale = Math.min(canvas.width / img.width, canvas.height / img.height);
-    // obtener la posición superior izquierda de la imagen
+    // Obtener la posición superior izquierda de la imagen
     let x = (canvas.width / 2) - (img.width / 2) * scale;
     let y = (canvas.height / 2) - (img.height / 2) * scale;
     context.drawImage(img, x, y, img.width * scale, img.height * scale);
 }
 
-function lineColour(color){ // funcion para el color
+function lineColour(color){ // Función para el color
     context.strokeStyle = color.value;
 }
 
-function lineWidth(ancho){ //funcion para el ancho de la linea
+function lineWidth(ancho){ //Función para el ancho de la linea
     context.lineWidth = ancho.value;
     document.getElementById("value").innerHTML = ancho.value;
 }
 
-function cleanUpAll(){ // funcion borrar/limpiar todo
+function cleanUpAll(){ // Función borrar/limpiar todo
     context.clearRect(0,0,canvas.width, canvas.height); // se le pasa las coordenadas iniciales (0 en x y 0 en y) y el ancho y alto final del canvas
 }
 function cleanUp(){  // Borra/dibuja en blanco
     context.strokeStyle = 'white'; // se setea el color blanco para borrar/dibujar
 }
 
-function contrast(grado){ //funcion para determinar el grado de contraste
+function contrast(grado){ //Función para determinar el grado de contraste
     context.contrast = grado.value;
     document.getElementById("degree").innerHTML = grado.value;
 }
 
-function save() { // funcion guardar imagen
+// Función guardar imagen
+function saveImage() { 
     let link = window.document.createElement( 'a' );
     let url = canvas.toDataURL();
     let filename = 'image.jpg';
@@ -77,8 +79,8 @@ function save() { // funcion guardar imagen
 
 // -----------------------FILTROS------------------------------------
 
-
-function grayscale() { // Filtro Escala de Grises
+// Filtro Escala de Grises
+function grayScaleImage() { 
     let imageData = context.getImageData(0,0,canvas.width, canvas.height);
     let pixels = imageData.data;
     let numPixels = pixels.length;
@@ -95,28 +97,30 @@ function grayscale() { // Filtro Escala de Grises
     context.putImageData(imageData, 0, 0);
 }
 
-function negative(){ // Filtro Negativo
+// Filtro Negativo
+function negativeImage(){ 
     let imageData = context.getImageData(0,0,canvas.width, canvas.height);
-    let dataArr = imageData.data;
+    let pixels = imageData.data;
 
-    for(let i = 0; i < dataArr.length; i += 4){
-        let r = dataArr[i]; 
-        let g = dataArr[i + 1]; 
-        let b = dataArr[i + 2]; 
-        let a = dataArr[i + 3]; 
+    for(let i = 0; i < pixels.length; i += 4){
+        let r = pixels[i]; 
+        let g = pixels[i + 1]; 
+        let b = pixels[i + 2]; 
+        let a = pixels[i + 3]; 
 
         let invertedRed = 255 - r;
         let invertedGreen = 255 - g;
         let invertedBlue = 255 - b;
 
-        dataArr[i] = invertedRed;
-        dataArr[i + 1] = invertedGreen;
-        dataArr[i + 2] = invertedBlue;
+        pixels[i] = invertedRed;
+        pixels[i + 1] = invertedGreen;
+        pixels[i + 2] = invertedBlue;
     }
     context.putImageData(imageData, 0, 0);
 }
 
-function sepia() { // Filtro Sepia
+// Filtro Sepia
+function sepiaImage() { 
     let imageData = context.getImageData(0,0,canvas.width, canvas.height);
     let pixels = imageData.data;
     let numPixels = pixels.length;
@@ -137,43 +141,50 @@ function sepia() { // Filtro Sepia
     context.putImageData( imageData, 0, 0 );
 }
 
+//Filtro de contraste
 function contrastImage(){
     let imageData = context.getImageData(0,0,canvas.width, canvas.height);
-    let data = imageData.data;
-    for (let i = 0; i < data.length; i += 4) {
+    let pixels = imageData.data;
+    for (let i = 0; i < pixels.length; i += 4) {
         let contrast = document.getElementById("degree").innerHTML;
-        let average = Math.round( ( data[i] + data[i+1] + data[i+2] ) / 3 );
+        let average = Math.round( ( pixels[i] + pixels[i+1] + pixels[i+2] ) / 3 );
         if (average > 127){
-            data[i] += ( data[i]/average ) * contrast;
-            data[i+1] += ( data[i+1]/average ) * contrast;
-            data[i+2] += ( data[i+2]/average ) * contrast;
+            pixels[i] += ( pixels[i]/average ) * contrast;
+            pixels[i+1] += ( pixels[i+1]/average ) * contrast;
+            pixels[i+2] += ( pixels[i+2]/average ) * contrast;
         }else{
-            data[i] -= ( data[i]/average ) * contrast;
-            data[i+1] -= ( data[i+1]/average ) * contrast;
-            data[i+2] -= ( data[i+2]/average ) * contrast;
+            pixels[i] -= ( pixels[i]/average ) * contrast;
+            pixels[i+1] -= ( pixels[i+1]/average ) * contrast;
+            pixels[i+2] -= ( pixels[i+2]/average ) * contrast;
         }
     }
     context.putImageData( imageData, 0, 0 );
 }
 
-function blur() {
+function blurImage() {
+
+
+
+
+    
     //Apply blur effect
 }
 
-
-
 //--------------------------------------
 
-canvas.addEventListener('mousemove', draw); // cuando el mouse se mueve
+// Cuando el mouse se mueve
+canvas.addEventListener('mousemove', draw); 
 
-canvas.addEventListener('mousedown', function(){ // cuando tenemos presionado el mouse
+// Cuando tenemos presionado el mouse
+canvas.addEventListener('mousedown', function(){ 
     ruta = true;
-    context.beginPath(); // para comenzar a dibujar
-    context.moveTo(x,y); // primeras coordenadas para empezar a dibujar, donde hace click el mouse
-    canvas.addEventListener('mousemove', draw);// llama a la funcion dibujar
+    context.beginPath(); // Para comenzar a dibujar
+    context.moveTo(x,y); // Primeras coordenadas para empezar a dibujar, donde hace click el mouse
+    canvas.addEventListener('mousemove', draw);// Llama a la función dibujar
 });
 
-canvas.addEventListener('mouseup', function(){ //cuando levanto el mouse se activa esta funcion
+// Cuando levanto el mouse se activa esta funcion
+canvas.addEventListener('mouseup', function(){ 
     ruta = false; 
 });
 
@@ -196,9 +207,9 @@ loadButton.addEventListener('change', function(ev) {
 btnBorrarTodo.addEventListener("click", cleanUpAll);
 btnBorrar.addEventListener("click", cleanUp);
 
-btnGreyScale.addEventListener("click", grayscale);
-btnNegative.addEventListener("click", negative);
-btnSepia.addEventListener("click", sepia);
+btnGreyScale.addEventListener("click", grayScaleImage);
+btnNegative.addEventListener("click", negativeImage);
+btnSepia.addEventListener("click", sepiaImage);
 btnContrast.addEventListener("click", contrastImage);
-btnBlur.addEventListener("click", blur);
-btnSave.addEventListener("click", save);
+btnBlur.addEventListener("click", blurImage);
+btnSave.addEventListener("click", saveImage);

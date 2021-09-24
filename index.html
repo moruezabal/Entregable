@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,15 +15,15 @@
                 <input type="color" id="color" onchange="lineColour(this)"><br>
                 <input type="range" onchange="lineWidth(this)" max="50" min="1" value="1"><span id="value">0</span><br>
             </div>
-            <input type="button" value="Borrar todo" id="borrarTodo">
-            <input type="button" value="Borrar" id="borrar">
-            <input type="button" value="Escala de grises" id="greyScale">
-            <input type="button" value="Negativo" id="negative">
-            <input type="button" value="Sepia" id="sepia">
-            <input type="button" value="Contraste" id="contrast">
+            <input type="button" class="btn" value="Borrar todo" id="borrarTodo">
+            <input type="button" class="btn" value="Borrar" id="borrar">
+            <input type="button" class="btn" value="Escala de grises" id="greyScale">
+            <input type="button" class="btn" value="Negativo" id="negative">
+            <input type="button" class="btn" value="Sepia" id="sepia">
+            <input type="button" class="btn" value="Contraste" id="contrast">
             <input type="range" onchange="contrast(this)" max="255" min="0" value="1"><span id="degree">0</span><br>
-            <input type="button" value="Desenfoque" id="blur">
-            <input type="button" value="Guardar imagen" id="save">
+            <input type="button" class="btn" value="Desenfoque" id="blur">
+            <input type="button" class="btn" value="Guardar imagen" id="save">
 
         </section>
         <div class="drawingSheet">
