@@ -19,11 +19,13 @@ section, .drawingSheet {
     border: 1px solid grey;  
     display: flex;  
     align-items: center;
-    box-shadow:5px 5px 15px rgb(102, 101, 101);
+    box-shadow:5px 5px 10px rgb(102, 101, 101);
 }
 .drawingSheet{
+    font-weight: bold;
+    color: black;
     flex-direction: column;
-    align-content: center;
+    text-align: center;
 }
 #tools{
     display: flex;
@@ -44,12 +46,15 @@ body h1{
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     display: flex;
     justify-content: center;
-    margin: 10px;
+    margin: 8px;
 }
-#tools input{
+input{
+    font-size: 18px;
     margin: 5px;
     padding: 3px;
+    border-radius: 20px;
+    box-shadow:5px 5px 5px rgb(102, 101, 101);
 }
-form p{
-    
+p input{
+    font-size: 12px;
 }

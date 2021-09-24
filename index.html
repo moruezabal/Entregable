@@ -8,7 +8,7 @@
     <title>The Paint</title>
 </head>
 <body>
-    <h1>The Paint</h1>
+    <h1 >The Paint</h1>
     <div class="container">
         <section id="tools">
             <div class="colorRange">
@@ -28,13 +28,10 @@
         </section>
         <div class="drawingSheet">
             <canvas id="canvas" width="800" height="500"></canvas>
-            
-            <form action="../../form-result.php" method="post" enctype="multipart/form-data" target="_blank">
-                <p>
-                    Sube una imagen:
-                    <input type="file" name="imagensubida" class="imagensubida" accept="image/*" id='loadButton'>
-                </p>
-            </form>
+            <p>
+                Sube una imagen:
+                <input type="file" name="imagensubida" class="imagensubida" accept="image/*" id='loadButton'>
+            </p>
         </div>
     </div>
     <script src="js/thePaint.js"></script>

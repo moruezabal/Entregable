@@ -14,13 +14,14 @@ let btnSave = document.getElementById("save");
 
 let loadButton = document.getElementById('loadButton');
 
+//--------------------------
+
 context.lineWidth = 1;//ancho de linea
-context.contrast = 0;// inicio de contr
+context.contrast = 0;// inicio de contraste
 
 let ruta = false; //si se movio el mouse
 
 function draw(event){// funcion dibujar
-
     let x = event.clientX - canvas.offsetLeft; // posicion x del mouse
     let y = event.clientY - canvas.offsetTop; // posicion y del mouse
 
@@ -30,45 +31,15 @@ function draw(event){// funcion dibujar
     }
 }
 
-canvas.addEventListener('mousemove', draw); // cuando el mouse se mueve
-
-canvas.addEventListener('mousedown', function(){ // cuando tenemos presionado el mouse
-    ruta = true;
-    context.beginPath(); // para comenzar a dibujar
-    context.moveTo(x,y) // primeras coordenadas para empezar a dibujar, donde hace click el mouse
-    canvas.addEventListener('mousemove', draw);// llama a la funcion dibujar
-});
-
-canvas.addEventListener('mouseup', function(){ //cuando levanto el mouse se activa esta funcion
-    ruta = false; 
-});
-
-loadButton.addEventListener('change', function(ev) {
-    cleanUpAll();
-    if(ev.target.files) {
-        let file = ev.target.files[0];
-        var reader  = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = function (e) {
-            var image = new Image();
-            image.src = e.target.result;
-            image.onload = function(ev) { //El evento se activa cada vez q la operacion de lectura se completo satisfactoriamente
-                scaleToFit(this);
-            }
-        }
-    }
-});
-
 function scaleToFit(img){
     let canvas = document.getElementById("canvas");
     // obtener la escala
-    var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+    let scale = Math.min(canvas.width / img.width, canvas.height / img.height);
     // obtener la posición superior izquierda de la imagen
-    var x = (canvas.width / 2) - (img.width / 2) * scale;
-    var y = (canvas.height / 2) - (img.height / 2) * scale;
+    let x = (canvas.width / 2) - (img.width / 2) * scale;
+    let y = (canvas.height / 2) - (img.height / 2) * scale;
     context.drawImage(img, x, y, img.width * scale, img.height * scale);
 }
-
 
 function lineColour(color){ // funcion para el color
     context.strokeStyle = color.value;
@@ -82,8 +53,8 @@ function lineWidth(ancho){ //funcion para el ancho de la linea
 function cleanUpAll(){ // funcion borrar/limpiar todo
     context.clearRect(0,0,canvas.width, canvas.height); // se le pasa las coordenadas iniciales (0 en x y 0 en y) y el ancho y alto final del canvas
 }
-function cleanUp(){ 
-    context.strokeStyle = 'white';
+function cleanUp(){  // Borra/dibuja en blanco
+    context.strokeStyle = 'white'; // se setea el color blanco para borrar/dibujar
 }
 
 function contrast(grado){ //funcion para determinar el grado de contraste
@@ -91,21 +62,31 @@ function contrast(grado){ //funcion para determinar el grado de contraste
     document.getElementById("degree").innerHTML = grado.value;
 }
 
+function save() { // funcion guardar imagen
+    let link = window.document.createElement( 'a' );
+    let url = canvas.toDataURL();
+    let filename = 'image.jpg';
+ 
+    link.setAttribute( 'href', url );
+    link.setAttribute( 'download', filename );
+    link.style.visibility = 'hidden';
+    window.document.body.appendChild( link );
+    link.click();
+    window.document.body.removeChild( link );
+};
+
 // -----------------------FILTROS------------------------------------
 
 
-function grayscale() {
-    let canvas = document.getElementById("canvas");
-    let context = canvas.getContext("2d");
-  
-    var imageData = context.getImageData(0,0,canvas.width, canvas.height);
-    var pixels = imageData.data;
-    var numPixels = pixels.length;
+function grayscale() { // Filtro Escala de Grises
+    let imageData = context.getImageData(0,0,canvas.width, canvas.height);
+    let pixels = imageData.data;
+    let numPixels = pixels.length;
   
     context.clearRect(0, 0,canvas.width, canvas.height);
     //iteracion por pixel y sus valores
-    for (var i = 0; i < numPixels; i++) {
-        var prom = (pixels[i*4] + pixels[i*4+1] + pixels[i*4+2]) /3;
+    for (let i = 0; i < numPixels; i++) {
+        let prom = (pixels[i*4] + pixels[i*4+1] + pixels[i*4+2]) /3;
         
         pixels[i*4] = prom;
         pixels[i*4+1] = prom;
@@ -114,20 +95,19 @@ function grayscale() {
     context.putImageData(imageData, 0, 0);
 }
 
-function negative(){
-    var imageData = context.getImageData(0,0,canvas.width, canvas.height);
-    var dataArr = imageData.data;
+function negative(){ // Filtro Negativo
+    let imageData = context.getImageData(0,0,canvas.width, canvas.height);
+    let dataArr = imageData.data;
 
-    for(var i = 0; i < dataArr.length; i += 4)
-    {
-        var r = dataArr[i]; 
-        var g = dataArr[i + 1]; 
-        var b = dataArr[i + 2]; 
-        var a = dataArr[i + 3]; 
+    for(let i = 0; i < dataArr.length; i += 4){
+        let r = dataArr[i]; 
+        let g = dataArr[i + 1]; 
+        let b = dataArr[i + 2]; 
+        let a = dataArr[i + 3]; 
 
-        var invertedRed = 255 - r;
-        var invertedGreen = 255 - g;
-        var invertedBlue = 255 - b;
+        let invertedRed = 255 - r;
+        let invertedGreen = 255 - g;
+        let invertedBlue = 255 - b;
 
         dataArr[i] = invertedRed;
         dataArr[i + 1] = invertedGreen;
@@ -136,18 +116,15 @@ function negative(){
     context.putImageData(imageData, 0, 0);
 }
 
-function sepia() {
-    let canvas = document.getElementById("canvas");
-    let context = canvas.getContext("2d");
-  
-    var imageData = context.getImageData(0,0,canvas.width, canvas.height);
-    var pixels = imageData.data;
-    var numPixels = pixels.length;
+function sepia() { // Filtro Sepia
+    let imageData = context.getImageData(0,0,canvas.width, canvas.height);
+    let pixels = imageData.data;
+    let numPixels = pixels.length;
  
-    for ( var i = 0; i < numPixels; i++ ) {
-        var r = pixels[ i * 4 ];
-        var g = pixels[ i * 4 + 1 ];
-        var b = pixels[ i * 4 + 2 ];
+    for ( let i = 0; i < numPixels; i++ ) {
+        let r = pixels[ i * 4 ];
+        let g = pixels[ i * 4 + 1 ];
+        let b = pixels[ i * 4 + 2 ];
  
         pixels[ i * 4 ] = 255 - r;
         pixels[ i * 4 + 1 ] = 255 - g;
@@ -157,20 +134,15 @@ function sepia() {
         pixels[ i * 4 + 1 ] = ( r * .349 ) + ( g *.686 ) + ( b * .168 );
         pixels[ i * 4 + 2 ] = ( r * .272 ) + ( g *.534 ) + ( b * .131 );
     }
- 
     context.putImageData( imageData, 0, 0 );
 }
 
 function contrastImage(){
-
-    let canvas = document.getElementById("canvas");
-    let context = canvas.getContext("2d");
-  
-    var imageData = context.getImageData(0,0,canvas.width, canvas.height);
-    var data = imageData.data;
-    for (var i = 0; i < data.length; i += 4) {
-        var contrast = document.getElementById("degree").innerHTML;
-        var average = Math.round( ( data[i] + data[i+1] + data[i+2] ) / 3 );
+    let imageData = context.getImageData(0,0,canvas.width, canvas.height);
+    let data = imageData.data;
+    for (let i = 0; i < data.length; i += 4) {
+        let contrast = document.getElementById("degree").innerHTML;
+        let average = Math.round( ( data[i] + data[i+1] + data[i+2] ) / 3 );
         if (average > 127){
             data[i] += ( data[i]/average ) * contrast;
             data[i+1] += ( data[i+1]/average ) * contrast;
@@ -188,19 +160,38 @@ function blur() {
     //Apply blur effect
 }
 
-function save() {
-    var link = window.document.createElement( 'a' ),
-        url = canvas.toDataURL(),
-        filename = 'image.jpg';
- 
-    link.setAttribute( 'href', url );
-    link.setAttribute( 'download', filename );
-    link.style.visibility = 'hidden';
-    window.document.body.appendChild( link );
-    link.click();
-    window.document.body.removeChild( link );
-};
 
+
+//--------------------------------------
+
+canvas.addEventListener('mousemove', draw); // cuando el mouse se mueve
+
+canvas.addEventListener('mousedown', function(){ // cuando tenemos presionado el mouse
+    ruta = true;
+    context.beginPath(); // para comenzar a dibujar
+    context.moveTo(x,y); // primeras coordenadas para empezar a dibujar, donde hace click el mouse
+    canvas.addEventListener('mousemove', draw);// llama a la funcion dibujar
+});
+
+canvas.addEventListener('mouseup', function(){ //cuando levanto el mouse se activa esta funcion
+    ruta = false; 
+});
+
+loadButton.addEventListener('change', function(ev) {
+    cleanUpAll();
+    if(ev.target.files) {
+        let file = ev.target.files[0];
+        let reader  = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = function (e) {
+            let image = new Image();
+            image.src = e.target.result;
+            image.onload = function(ev) { //El evento se activa cada vez q la operacion de lectura se completo satisfactoriamente
+                scaleToFit(this);
+            }
+        }
+    }
+});
 
 btnBorrarTodo.addEventListener("click", cleanUpAll);
 btnBorrar.addEventListener("click", cleanUp);
