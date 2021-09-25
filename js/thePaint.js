@@ -4,14 +4,14 @@ let canvas = document.getElementById("canvas");
 let context = canvas.getContext("2d");
 
 let btnBorrar = document.getElementById("borrar");
-let btnBorrarTodo = document.getElementById("borrarTodo");
+let btnNuevo = document.getElementById("nuevo");
 let btnGreyScale = document.getElementById("greyScale");
 let btnNegative = document.getElementById("negative");
 let btnSepia = document.getElementById("sepia");
 let btnContrast = document.getElementById("contrast");
 let btnBlur = document.getElementById("blur");
 let btnSave = document.getElementById("save");
-let btnSaturation = document.getElementById("saturation");
+let btnEdgeDetection = document.getElementById("edgeDetection");
 
 let loadButton = document.getElementById('loadButton');
 
@@ -308,7 +308,7 @@ function conv3x(data, idx, w, m){
     context.putImageData(pixels, 0, 0);
   }
 
-btnBorrarTodo.addEventListener("click", cleanUpAll);
+btnNuevo.addEventListener("click", cleanUpAll);
 btnBorrar.addEventListener("click", cleanUp);
 
 btnGreyScale.addEventListener("click", grayScaleImage);
@@ -317,6 +317,6 @@ btnSepia.addEventListener("click", sepiaImage);
 btnContrast.addEventListener("click", contrastImage);
 btnBlur.addEventListener("click", blurImage);
 btnSave.addEventListener("click", saveImage);
-btnSaturation.addEventListener("click", gradient);
+btnEdgeDetection.addEventListener("click", gradient);
 
 
