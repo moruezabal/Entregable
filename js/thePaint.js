@@ -317,9 +317,6 @@ btnSepia.addEventListener("click", sepiaImage);
 btnContrast.addEventListener("click", contrastImage);
 btnBlur.addEventListener("click", blurImage);
 btnSave.addEventListener("click", saveImage);
-<<<<<<< HEAD
 btnSaturation.addEventListener("click", gradient);
 
-=======
->>>>>>> c7618c76143e81b8ab0176a711bf6332e89b67a1
 
