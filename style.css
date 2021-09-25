@@ -42,9 +42,9 @@ section{
     flex-direction: column;
 }
 body h1{
-    color: rgb(247, 252, 205);
+    color: rgb(243, 240, 72);
     font-weight: bold;
-    text-shadow:-3px 3px rgb(175, 12, 34);
+    text-shadow:-3px 3px rgb(41, 59, 95);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     display: flex;
     justify-content: center;
@@ -54,6 +54,12 @@ body h1{
     font-size: 18px;
     margin: 5px;
     padding: 3px;
+    border-radius: 20px;
+    box-shadow:5px 5px 5px rgb(102, 101, 101);
+}
+p{
+    padding: 3px;
+    background-color: white;
     border-radius: 20px;
     box-shadow:5px 5px 5px rgb(102, 101, 101);
 }
