@@ -130,14 +130,14 @@ function sepiaImage() {
         let r = pixels[i * 4];
         let g = pixels[i * 4 + 1];
         let b = pixels[i * 4 + 2];
- 
-        r = 255 - r;
-        g = 255 - g;
-        b = 255 - b;
- 
-        r = ( r * .393 ) + ( g *.769 ) + ( b * .189 );
-        g = ( r * .349 ) + ( g *.686 ) + ( b * .168 );
-        b = ( r * .272 ) + ( g *.534 ) + ( b * .131 );
+
+        pixels[ i * 4 ] = 255 - r;
+        pixels[ i * 4 + 1 ] = 255 - g;
+        pixels[ i * 4 + 2 ] = 255 - b;
+
+        pixels[ i * 4 ] = ( r * .393 ) + ( g *.769 ) + ( b * .189 );
+        pixels[ i * 4 + 1 ] = ( r * .349 ) + ( g *.686 ) + ( b * .168 );
+        pixels[ i * 4 + 2 ] = ( r * .272 ) + ( g *.534 ) + ( b * .131 );
     }
     // Coloca los datos de la imagen en el lienzo
     context.putImageData( imageData, 0, 0 );
