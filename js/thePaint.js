@@ -32,6 +32,7 @@ function draw(event){
     }
 }
 
+//Función para que al subir la imagen se adapte al lienzo
 function scaleToFit(img){
     let canvas = document.getElementById("canvas");
     // Obtener la escala
@@ -83,18 +84,18 @@ function saveImage() {
 function grayScaleImage() { 
     let imageData = context.getImageData(0,0,canvas.width, canvas.height);
     let pixels = imageData.data;
-    let numPixels = pixels.length;
   
-    context.clearRect(0, 0,canvas.width, canvas.height);
-    //iteracion por pixel y sus valores
-    for (let i = 0; i < numPixels; i++) {
-        let prom = (pixels[i*4] + pixels[i*4+1] + pixels[i*4+2]) /3;
+    context.clearRect(0, 0,canvas.width, canvas.height);// limpia el lienzo
+    //Iteracion por pixel y sus valores
+    for (let i = 0; i < pixels.length; i++) {
+        let prom = (pixels[i*4] + pixels[i*4+1] + pixels[i*4+2]) /3; // busca un promedio para ubicarlo en la escala de grises.
         
         pixels[i*4] = prom;
         pixels[i*4+1] = prom;
         pixels[i*4+2] = prom;
     }
-    context.putImageData(imageData, 0, 0);
+    // Coloca los datos de la imagen en el lienzo
+    context.putImageData(imageData, 0, 0); 
 }
 
 // Filtro Negativo
@@ -106,7 +107,6 @@ function negativeImage(){
         let r = pixels[i]; 
         let g = pixels[i + 1]; 
         let b = pixels[i + 2]; 
-        let a = pixels[i + 3]; 
 
         let invertedRed = 255 - r;
         let invertedGreen = 255 - g;
@@ -116,6 +116,7 @@ function negativeImage(){
         pixels[i + 1] = invertedGreen;
         pixels[i + 2] = invertedBlue;
     }
+    // Coloca los datos de la imagen en el lienzo
     context.putImageData(imageData, 0, 0);
 }
 
@@ -123,9 +124,8 @@ function negativeImage(){
 function sepiaImage() { 
     let imageData = context.getImageData(0,0,canvas.width, canvas.height);
     let pixels = imageData.data;
-    let numPixels = pixels.length;
  
-    for ( let i = 0; i < numPixels; i++ ) {
+    for ( let i = 0; i < pixels.length; i++ ) {
         let r = pixels[ i * 4 ];
         let g = pixels[ i * 4 + 1 ];
         let b = pixels[ i * 4 + 2 ];
@@ -138,6 +138,7 @@ function sepiaImage() {
         pixels[ i * 4 + 1 ] = ( r * .349 ) + ( g *.686 ) + ( b * .168 );
         pixels[ i * 4 + 2 ] = ( r * .272 ) + ( g *.534 ) + ( b * .131 );
     }
+    // Coloca los datos de la imagen en el lienzo
     context.putImageData( imageData, 0, 0 );
 }
 
@@ -145,32 +146,89 @@ function sepiaImage() {
 function contrastImage(){
     let imageData = context.getImageData(0,0,canvas.width, canvas.height);
     let pixels = imageData.data;
+
     for (let i = 0; i < pixels.length; i += 4) {
-        let contrast = document.getElementById("degree").innerHTML;
-        let average = Math.round( ( pixels[i] + pixels[i+1] + pixels[i+2] ) / 3 );
-        if (average > 127){
-            pixels[i] += ( pixels[i]/average ) * contrast;
-            pixels[i+1] += ( pixels[i+1]/average ) * contrast;
-            pixels[i+2] += ( pixels[i+2]/average ) * contrast;
+        let contrast = document.getElementById("degree").innerHTML; // trae el dato de saturación señalado por el usuario y lo guarda en contrast
+        let prom = Math.round( ( pixels[i] + pixels[i+1] + pixels[i+2] ) / 3 ); // pone en la variable prom un numero redondo mas cercano al resultado
+        if (prom > 127){
+            pixels[i] += ( pixels[i]/prom ) * contrast;
+            pixels[i+1] += ( pixels[i+1]/prom ) * contrast;
+            pixels[i+2] += ( pixels[i+2]/prom ) * contrast;
         }else{
-            pixels[i] -= ( pixels[i]/average ) * contrast;
-            pixels[i+1] -= ( pixels[i+1]/average ) * contrast;
-            pixels[i+2] -= ( pixels[i+2]/average ) * contrast;
+            pixels[i] -= ( pixels[i]/prom ) * contrast;
+            pixels[i + 1] -= ( pixels[i + 1]/prom ) * contrast;
+            pixels[i + 2] -= ( pixels[i + 2]/prom ) * contrast;
         }
     }
-    context.putImageData( imageData, 0, 0 );
+    // Coloca los datos de la imagen en el lienzo
+    context.putImageData( imageData, 0, 0 ); 
+}
+
+
+function copyImageData(context, src)
+{
+    var dst = context.createImageData(src.width, src.height);
+    dst.data.set(src.data);
+    return dst;
 }
 
 function blurImage() {
+    let canvasData = context.getImageData(0, 0, canvas.width, canvas.height);
+   
+    let copyCanvasData = copyImageData(context, canvasData);
+    let sumred = 0;
+    let sumgreen = 0;
+    let sumblue = 0;
 
+    // Recorro la matriz
+    for ( let x = 0; x < copyCanvasData.width; x++) {    
+        for ( let y = 0; y < copyCanvasData.height; y++) {    
 
-
-
-    
-    //Apply blur effect
+            // Índice del píxel en la matriz    
+            let index = (x + y * copyCanvasData.width) * 4;       
+            for(let subCol=-2; subCol<=2; subCol++) {
+                let col = subCol + x;
+                if(col <0 || col >= copyCanvasData.width) {
+                    col = 0; // si se va del rango de la matriz col se vuelve cero para que se mantenga dentro de la misma
+                }
+                for(let subfil=-2; subfil<=2; subfil++) {
+                    let fil = subfil + y;
+                    if(fil < 0 || fil >= copyCanvasData.height) {
+                        fil = 0; // Lo mismo que las columnas pero ahora con las filas
+                    }
+                    
+                    let index2 = (col + fil * copyCanvasData.width) * 4;    
+                    let r = copyCanvasData.data[index2 + 0];    
+                    let g = copyCanvasData.data[index2 + 1];    
+                    let b = copyCanvasData.data[index2 + 2];
+                    sumred += r;
+                    sumgreen += g;
+                    sumblue += b;
+                }
+            }
+            // Calculamos el nuevo valor del RGB
+            let newRed = (sumred / 25.0);
+            let newGreen = (sumgreen / 25.0);
+            let newBlue = (sumblue / 25.0);
+            
+            // Seteamos en cero para el proximo pixel
+            sumred = 0;
+            sumgreen = 0;
+            sumblue = 0;
+            // se asigna un nuevo pixel
+            canvasData.data[index + 0] = newRed;   
+            canvasData.data[index + 1] = newGreen; 
+            canvasData.data[index + 2] = newBlue;
+        }
+    }
+    // Coloca los datos de la imagen en el lienzo
+    context.putImageData(canvasData, 0, 0);
 }
 
+     
+
 //--------------------------------------
+canvas.addEventListener('click', draw); 
 
 // Cuando el mouse se mueve
 canvas.addEventListener('mousemove', draw); 
@@ -213,3 +271,4 @@ btnSepia.addEventListener("click", sepiaImage);
 btnContrast.addEventListener("click", contrastImage);
 btnBlur.addEventListener("click", blurImage);
 btnSave.addEventListener("click", saveImage);
+
