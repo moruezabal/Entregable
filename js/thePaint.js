@@ -225,8 +225,6 @@ function blurImage() {
     context.putImageData(canvasData, 0, 0);
 }
 
-     
-
 //--------------------------------------
 canvas.addEventListener('click', draw); 
 
