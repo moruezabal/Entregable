@@ -228,8 +228,6 @@ function blurImage() {
 
 //--------------------------------------
 
-
-
 // Cuando el mouse se mueve
 canvas.addEventListener('mousemove', draw); 
 
@@ -264,18 +262,12 @@ loadButton.addEventListener('change', function(ev) {
     }
 });
 
-/**
-* @param data - input pixels data
-* @param idx - the index of the central pixel
-* @param w - image width (width*4 in case of RGBA)
-* @param m - the gradient mask (for Sobel=[1, 2, 1])
-*/
-function conv3x(data, idx, w, m){ // 
+function conv3x(data, idx, w, m){ // Calcula el valor de convolucion segun el kernel de 3x3 en x
     return (m[0]*data[idx - w - 4] + m[1]*data[idx - 4] + m[2]*data[idx + w - 4]
             -m[0]*data[idx - w + 4] - m[1]*data[idx + 4] - m[2]*data[idx + 4 + 4]);
   }
   
-  function conv3y(data, idx, w, m){
+  function conv3y(data, idx, w, m){// Calcula el valor de convolucion segun el kernel de 3x3 en y
     return (m[0]*data[idx - w - 4] + m[1]*data[idx - w] + m[2]*data[idx - w + 4]
         -(m[0]*data[idx + w - 4] + m[1]*data[idx + w] + m[2]*data[idx + w + 4]));
   }
